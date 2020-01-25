@@ -69,3 +69,7 @@ test('Tokenizer knows operators', t => {
     { type: 'lower_or_equal', value: '<=' }
   ])
 })
+
+test('Tokenizer knows wrong operators', t => {
+  t.throws<TypeError>(() => Tokenizer('=asd'))
+})
