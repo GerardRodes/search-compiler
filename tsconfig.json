@@ -4,11 +4,12 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "baseUrl": "."
+    "declaration": true,
+    "baseUrl": ".",
+    "paths": {
+      "search-compiler": ["lib/SearchCompiler.js"]
+    }
   },
-  "paths": {
-		"search-compiler": ["lib/*"]
-	},
   "include": [
     "src"
   ],
