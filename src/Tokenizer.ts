@@ -1,12 +1,4 @@
-type Token_Type =
-  '__initial_value__' |
-  'word' |
-  'number' |
-
-  'or' |
-  'and' |
-  'not' |
-
+export type Comparison_Operator =
   'includes' |
   'equal' |
   'not_equal' |
@@ -15,7 +7,17 @@ type Token_Type =
   'lower' |
   'lower_or_equal'
 
-interface Token {
+export type Logical_Operator = 'or' | 'and'
+
+export type Operator = Comparison_Operator | Logical_Operator | 'not'
+
+export type Token_Type =
+  Operator |
+  '__initial_value__' |
+  'word' |
+  'number'
+
+export interface Token {
   type: Token_Type
   value: string
 }
