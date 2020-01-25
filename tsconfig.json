@@ -5,10 +5,7 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "declaration": true,
-    "baseUrl": ".",
-    "paths": {
-      "search-compiler": ["lib/SearchCompiler.js"]
-    }
+    "baseUrl": "."
   },
   "include": [
     "src"

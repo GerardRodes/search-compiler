@@ -6,17 +6,8 @@
   "author": "Gerard Rodes",
   "license": "ISC",
   "scripts": {
-    "build": "rollup -c",
-    "test": "ava"
-  },
-  "ava": {
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register",
-      "tsconfig-paths/register"
-    ]
+    "build": "rm -rf lib && rollup -c",
+    "test": "npm run build && ava"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.17.0",
@@ -27,11 +18,11 @@
     "eslint-plugin-node": "^9.2.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "esm": "^3.2.25",
     "rollup": "^1.29.1",
     "rollup-plugin-eslint": "^7.0.0",
     "rollup-plugin-typescript2": "^0.25.3",
     "ts-node": "^8.6.2",
-    "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.5"
   }
 }
