@@ -59,10 +59,11 @@ interface Condition extends Node {
     operator: Condition_Operator_Part[];
     value: Condition_Text_Part[];
 }
+declare type FilterConditions = Array<Condition | Filter>;
 interface Filter extends Node {
     type: Condition_Type.Filter;
     operator: Filter_Operator_Type;
-    conditions: Array<Condition | Filter>;
+    conditions: FilterConditions;
 }
 export default function Syntaxer(tokens: Token[]): Filter;
 export {};

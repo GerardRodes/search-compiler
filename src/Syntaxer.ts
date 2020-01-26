@@ -49,10 +49,11 @@ interface Filter_Operator extends Value_Node {
   values: string []
 }
 
+type FilterConditions = Array<Condition|Filter>
 interface Filter extends Node {
   type: Condition_Type.Filter
   operator: Filter_Operator_Type
-  conditions: Array<Condition|Filter>
+  conditions: FilterConditions
 }
 
 const filter_operator_token_types: Set<Token_Type> = new Set(Object.values(Filter_Operator_Type) as Token_Type[])
@@ -103,11 +104,11 @@ export default function Syntaxer (tokens: Token[]): Filter {
     return { type: Condition_Type.Condition, attribute, operator, value }
   }
 
-  function interpret_filter (operator: Filter_Operator_Type): Filter {
+  function interpret_filter (operator: Filter_Operator_Type, conditions: FilterConditions, is_root: boolean): Filter {
     const filter: Filter = {
       type: Condition_Type.Filter,
       operator,
-      conditions: []
+      conditions
     }
 
     while (current < tokens.length) {
@@ -126,11 +127,15 @@ export default function Syntaxer (tokens: Token[]): Filter {
 
       if (next_operators[0].type === operator) continue
 
-      filter.conditions.push(interpret_filter(next_operators[0].type))
+      const child_filter = interpret_filter(next_operators[0].type, filter.conditions.slice(), false)
+      if (is_root) {
+        filter.operator = child_filter.operator
+      }
+      filter.conditions = child_filter.conditions
     }
 
     return filter
   }
 
-  return interpret_filter(Filter_Operator_Type.And)
+  return interpret_filter(Filter_Operator_Type.And, [], true)
 }
