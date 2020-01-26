@@ -19,6 +19,14 @@ test('Tokenizer handles spaced tokens and operator aliases', t => {
   ])
 })
 
+test('trims text', t => {
+  t.deepEqual(Tokenizer('   A   >  b             '), [
+    { type: Token_Type.Word, value: 'A' },
+    { type: Token_Type.Greater, value: '>' },
+    { type: Token_Type.Word, value: 'b' }
+  ])
+})
+
 test('Tokenizer knows numbers', t => {
   t.deepEqual(Tokenizer('1234 >= 4'), [
     { type: Token_Type.Number, value: '1234' },

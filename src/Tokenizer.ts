@@ -37,7 +37,7 @@ export default function Tokenizer (input: string): Token[] {
   let current = 0
 
   function skip_break (): void {
-    while (is_break(input[current])) {
+    while (current < input.length && is_break(input[current])) {
       current++
     }
   }
@@ -46,7 +46,7 @@ export default function Tokenizer (input: string): Token[] {
     return function (): string {
       let value = ''
 
-      while (checker(input[current])) {
+      while (current < input.length && checker(input[current])) {
         value += input[current]
         current++
       }

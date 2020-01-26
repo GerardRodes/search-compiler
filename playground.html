@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Playground</title>
+  <style>
+    .output {
+      font-family: monospace;
+      background-color: #222;
+      color: #eee;
+      white-space: pre;
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    .section-title {
+      background-color: #333;
+      color: #eee;
+      text-align: center;
+      padding: .25rem;
+      font-family: sans-serif;
+      font-size: 1.25rem;
+      box-shadow: 0 0 1px #000;
+      border-radius: 3px 3px 0 0;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <textarea
+      style="
+        width: 100%;
+      "
+      id="input"
+    ></textarea>
+
+    <div style="
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    ">
+      <div style="width: 30%;">
+        <div class="section-title">Tokens</div>
+        <div id="tokens" class="output"></div>
+      </div>
+      <div style="width: 30%;">
+        <div class="section-title">AST</div>
+        <div id="ast" class="output"></div>
+      </div>
+      <div style="width: 30%;">
+        <div class="section-title">Output</div>
+        <div id="filter" class="output"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import Tokenizer from './lib/Tokenizer.js'
+    import Syntaxer from './lib/Syntaxer.js'
+
+    const $input = document.getElementById('input')
+    const $tokens = document.getElementById('tokens')
+    const $ast = document.getElementById('ast')
+
+    $input.addEventListener('input', e => {
+      try {
+        const tokens = Tokenizer(e.target.value)
+        console.log({tokens})
+        $tokens.innerText = JSON.stringify(tokens, null, 2)
+
+        try {
+          const ast = Syntaxer(tokens)
+          console.log({ast})
+          $ast.innerText = JSON.stringify(ast, null, 2)
+        } catch (e) {
+          $ast.innerText = e.message
+        }
+      } catch (e) {
+        $tokens.innerText = e.message
+      }
+    })
+  </script>
+</body>
+</html>
