@@ -1,7 +1,36 @@
-export declare type Comparison_Operator = 'includes' | 'equal' | 'not_equal' | 'greater' | 'greater_or_equal' | 'lower' | 'lower_or_equal';
-export declare type Logical_Operator = 'or' | 'and';
-export declare type Operator = Comparison_Operator | Logical_Operator | 'not';
-export declare type Token_Type = Operator | '__initial_value__' | 'word' | 'number';
+export declare enum Comparison_Operator {
+    Includes = "includes",
+    Equal = "equal",
+    Not_equal = "not_equal",
+    Greater = "greater",
+    Greater_or_equal = "greater_or_equal",
+    Lower = "lower",
+    Lower_or_equal = "lower_or_equal",
+    Not = "not"
+}
+export declare enum Logical_Operator {
+    Or = "or",
+    And = "and"
+}
+export declare enum Text_Type {
+    Word = "word",
+    Number = "number"
+}
+export declare type Token_Type = Text_Type | Logical_Operator | Comparison_Operator;
+export declare const Token_Type: {
+    Word: Text_Type.Word;
+    Number: Text_Type.Number;
+    Or: Logical_Operator.Or;
+    And: Logical_Operator.And;
+    Includes: Comparison_Operator.Includes;
+    Equal: Comparison_Operator.Equal;
+    Not_equal: Comparison_Operator.Not_equal;
+    Greater: Comparison_Operator.Greater;
+    Greater_or_equal: Comparison_Operator.Greater_or_equal;
+    Lower: Comparison_Operator.Lower;
+    Lower_or_equal: Comparison_Operator.Lower_or_equal;
+    Not: Comparison_Operator.Not;
+};
 export interface Token {
     type: Token_Type;
     value: string;

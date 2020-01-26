@@ -1,21 +1,30 @@
-export type Comparison_Operator =
-  'includes' |
-  'equal' |
-  'not_equal' |
-  'greater' |
-  'greater_or_equal' |
-  'lower' |
-  'lower_or_equal'
+export enum Comparison_Operator {
+  Includes = 'includes',
+  Equal = 'equal',
+  Not_equal = 'not_equal',
+  Greater = 'greater',
+  Greater_or_equal = 'greater_or_equal',
+  Lower = 'lower',
+  Lower_or_equal = 'lower_or_equal',
+  Not = 'not', // here for convenience
+}
 
-export type Logical_Operator = 'or' | 'and'
+export enum Logical_Operator {
+  Or = 'or',
+  And = 'and',
+}
 
-export type Operator = Comparison_Operator | Logical_Operator | 'not'
+export enum Text_Type {
+  Word = 'word',
+  Number = 'number',
+}
 
-export type Token_Type =
-  Operator |
-  '__initial_value__' |
-  'word' |
-  'number'
+export type Token_Type = Text_Type | Logical_Operator | Comparison_Operator
+export const Token_Type = {
+  ...Comparison_Operator,
+  ...Logical_Operator,
+  ...Text_Type
+}
 
 export interface Token {
   type: Token_Type
@@ -53,12 +62,12 @@ export default function Tokenizer (input: string): Token[] {
   function next_token (): Token {
     const token: Token = {
       value: '',
-      type: '__initial_value__'
+      type: Token_Type.Word
     }
 
     if (is_number(input[current])) {
       token.value = read_number()
-      token.type = 'number'
+      token.type = Token_Type.Number
       return token
     }
 
@@ -69,30 +78,30 @@ export default function Tokenizer (input: string): Token[] {
       switch (token.value) {
         case 'is':
         case 'equal':
-          token.type = 'equal'
+          token.type = Token_Type.Equal
           break
 
         case 'includes':
         case 'contains':
         case 'has':
         case 'in':
-          token.type = 'includes'
+          token.type = Token_Type.Includes
           break
 
         case 'or':
-          token.type = 'or'
+          token.type = Token_Type.Or
           break
 
         case 'and':
-          token.type = 'and'
+          token.type = Token_Type.And
           break
 
         case 'not':
-          token.type = 'not'
+          token.type = Token_Type.Not
           break
 
         default:
-          token.type = 'word'
+          token.type = Token_Type.Word
           break
       }
 
@@ -105,39 +114,39 @@ export default function Tokenizer (input: string): Token[] {
     switch (token.value) {
       case '=':
       case '==':
-        token.type = 'equal'
+        token.type = Token_Type.Equal
         break
 
       case '!=':
-        token.type = 'not_equal'
+        token.type = Token_Type.Not_equal
         break
 
       case '||':
-        token.type = 'or'
+        token.type = Token_Type.Or
         break
 
       case '&&':
-        token.type = 'and'
+        token.type = Token_Type.And
         break
 
       case '!':
-        token.type = 'not'
+        token.type = Token_Type.Not
         break
 
       case '>':
-        token.type = 'greater'
+        token.type = Token_Type.Greater
         break
 
       case '<':
-        token.type = 'lower'
+        token.type = Token_Type.Lower
         break
 
       case '>=':
-        token.type = 'greater_or_equal'
+        token.type = Token_Type.Greater_or_equal
         break
 
       case '<=':
-        token.type = 'lower_or_equal'
+        token.type = Token_Type.Lower_or_equal
         break
 
       default:
