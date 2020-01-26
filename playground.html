@@ -34,7 +34,7 @@
         width: 100%;
       "
       id="input"
-    ></textarea>
+    >A=a and B >b or D is d</textarea>
 
     <div style="
       display: flex;
@@ -64,9 +64,9 @@
     const $tokens = document.getElementById('tokens')
     const $ast = document.getElementById('ast')
 
-    $input.addEventListener('input', e => {
+    function printOutputs () {
       try {
-        const tokens = Tokenizer(e.target.value)
+        const tokens = Tokenizer($input.value)
         console.log({tokens})
         $tokens.innerText = JSON.stringify(tokens, null, 2)
 
@@ -80,7 +80,9 @@
       } catch (e) {
         $tokens.innerText = e.message
       }
-    })
+    }
+    $input.addEventListener('input', printOutputs)
+    printOutputs()
   </script>
 </body>
 </html>
