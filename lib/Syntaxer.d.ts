@@ -24,7 +24,7 @@ export declare enum Condition_Type {
     Filter = "filter",
     Condition = "condition"
 }
-export declare type Node_Type = Condition_Type | Condition_Text_Part_Type | Condition_Operator_Part_Type;
+export declare type Node_Type = Filter_Operator_Type | Condition_Type | Condition_Text_Part_Type | Condition_Operator_Part_Type;
 export declare const Node_Type: {
     Includes: Comparison_Operator.Includes;
     Equal: Comparison_Operator.Equal;
@@ -34,23 +34,23 @@ export declare const Node_Type: {
     Lower: Comparison_Operator.Lower;
     Lower_or_equal: Comparison_Operator.Lower_or_equal;
     Not: Comparison_Operator.Not;
-    Or: Logical_Operator.Or;
-    And: Logical_Operator.And;
     Word: Text_Type.Word;
     Number: Text_Type.Number;
     Filter: Condition_Type.Filter;
     Condition: Condition_Type.Condition;
+    Or: Logical_Operator.Or;
+    And: Logical_Operator.And;
 };
 interface Node {
     type: Node_Type;
 }
-interface Condition_Part extends Node {
+interface Value_Node extends Node {
     value: string;
 }
-interface Condition_Text_Part extends Condition_Part {
+interface Condition_Text_Part extends Value_Node {
     type: Condition_Text_Part_Type;
 }
-interface Condition_Operator_Part extends Condition_Part {
+interface Condition_Operator_Part extends Value_Node {
     type: Condition_Operator_Part_Type;
 }
 interface Condition extends Node {
