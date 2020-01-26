@@ -1,0 +1,91 @@
+{
+  "type": "filter",
+  "operator": "or",
+  "conditions": [
+    {
+      "type": "filter",
+      "operator": "and",
+      "conditions": [
+        {
+          "type": "condition",
+          "attribute": [
+            {
+              "type": "word",
+              "value": "last"
+            },
+            {
+              "type": "word",
+              "value": "name"
+            }
+          ],
+          "operator": [
+            {
+              "type": "equal",
+              "value": "is"
+            }
+          ],
+          "value": [
+            {
+              "type": "word",
+              "value": "bla"
+            },
+            {
+              "type": "word",
+              "value": "blo"
+            }
+          ]
+        },
+        {
+          "type": "condition",
+          "attribute": [
+            {
+              "type": "word",
+              "value": "first"
+            },
+            {
+              "type": "word",
+              "value": "name"
+            }
+          ],
+          "operator": [
+            {
+              "type": "equal",
+              "value": "="
+            }
+          ],
+          "value": [
+            {
+              "type": "word",
+              "value": "blu"
+            },
+            {
+              "type": "word",
+              "value": "ble"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "condition",
+      "attribute": [
+        {
+          "type": "word",
+          "value": "color"
+        }
+      ],
+      "operator": [
+        {
+          "type": "includes",
+          "value": "has"
+        }
+      ],
+      "value": [
+        {
+          "type": "word",
+          "value": "blue"
+        }
+      ]
+    }
+  ]
+}

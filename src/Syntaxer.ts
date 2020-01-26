@@ -104,7 +104,7 @@ export default function Syntaxer (tokens: Token[]): Filter {
     return { type: Condition_Type.Condition, attribute, operator, value }
   }
 
-  function interpret_filter (operator: Filter_Operator_Type, conditions: FilterConditions, is_root: boolean): Filter {
+  function interpret_filter (operator: Filter_Operator_Type, conditions: FilterConditions): Filter {
     const filter: Filter = {
       type: Condition_Type.Filter,
       operator,
@@ -124,18 +124,19 @@ export default function Syntaxer (tokens: Token[]): Filter {
           'with values': next_operators.map(o => o.value).join(', ')
         })
       }
+      const next_operator_type = next_operators[0].type
 
-      if (next_operators[0].type === operator) continue
+      if (next_operator_type === operator) continue
 
-      const child_filter = interpret_filter(next_operators[0].type, filter.conditions.slice(), false)
-      if (is_root) {
-        filter.operator = child_filter.operator
+      if (next_operator_type === Filter_Operator_Type.And) {
+        filter.conditions.push(interpret_filter(next_operator_type, [filter.conditions.pop()]))
+      } else {
+        return filter
       }
-      filter.conditions = child_filter.conditions
     }
 
     return filter
   }
 
-  return interpret_filter(Filter_Operator_Type.And, [], true)
+  return interpret_filter(Filter_Operator_Type.Or, [])
 }

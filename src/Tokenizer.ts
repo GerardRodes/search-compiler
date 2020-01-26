@@ -57,7 +57,7 @@ export default function Tokenizer (input: string): Token[] {
 
   const read_number = Read_Factory(is_number)
   const read_word = Read_Factory(is_alpha)
-  const read_symbol = Read_Factory(char => !is_break(char))
+  const read_operator = Read_Factory(is_operator)
 
   function next_token (): Token {
     const token: Token = {
@@ -109,7 +109,7 @@ export default function Tokenizer (input: string): Token[] {
     }
 
     // here only valid operators are allowed
-    token.value = read_symbol()
+    token.value = read_operator()
 
     switch (token.value) {
       case '=':
@@ -165,8 +165,9 @@ export default function Tokenizer (input: string): Token[] {
   return tokens
 }
 
+const breaks = new Set([' ', '\n', '\r', '\t', undefined])
 function is_break (char: string): boolean {
-  return char === ' ' || char === '\n' || char === '\r' || char === '\t' || char === undefined
+  return breaks.has(char)
 }
 
 function is_number (char: string): boolean {
@@ -175,4 +176,9 @@ function is_number (char: string): boolean {
 
 function is_alpha (char: string): boolean {
   return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')
+}
+
+const operators = new Set(['=', '!', '|', '&', '>', '<'])
+function is_operator (char: string): boolean {
+  return operators.has(char)
 }

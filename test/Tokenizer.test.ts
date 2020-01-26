@@ -71,5 +71,5 @@ test('Tokenizer knows operators', t => {
 })
 
 test('Tokenizer knows wrong operators', t => {
-  t.throws<TypeError>(() => Tokenizer('=asd'))
+  t.throws<TypeError>(() => Tokenizer('====='))
 })
