@@ -141,3 +141,15 @@ test('Syntaxer handles A and B or C and D', t => {
     ]
   })
 })
+
+test('Syntaxer throws on imcomplete condition', t => {
+  t.throws<SyntaxError>(() => Syntaxer(Tokenizer('A=')))
+})
+
+test('Syntaxer throws on imcomplete filter', t => {
+  t.throws<SyntaxError>(() => Syntaxer(Tokenizer('A=a or')))
+})
+
+test('Syntaxer throws on wrong filter', t => {
+  t.throws<SyntaxError>(() => Syntaxer(Tokenizer('or')))
+})

@@ -60,10 +60,13 @@ const filter_operator_token_types: Set<Token_Type> = new Set(Object.values(Filte
 const condition_operator_part_token_types: Set<Token_Type> = new Set(Object.values(Condition_Operator_Part_Type) as Token_Type[])
 const condition_text_part_token_types: Set<Token_Type> = new Set(Object.values(Condition_Text_Part_Type) as Token_Type[])
 
-function NewSyntaxError (scope: string, part: string, explanation: {[key: string]: string}): SyntaxError {
-  const msg = `Unexpected token interpreting ${scope}'s ${part}`
+function NewSyntaxErr (msg: string, explanation: {[key: string]: string}): SyntaxError {
   const explanation_msg = Object.entries(explanation).map(([key, val]) => key + ': ' + val).join('\n')
   return new SyntaxError(msg + '\n' + explanation_msg)
+}
+
+function NewUnexpectedTokenErr (scope: string, part: string, explanation: {[key: string]: string}): SyntaxError {
+  return NewSyntaxErr(`Unexpected token interpreting ${scope}'s ${part}`, explanation)
 }
 
 export default function Syntaxer (tokens: Token[]): Filter {
@@ -73,11 +76,16 @@ export default function Syntaxer (tokens: Token[]): Filter {
     return function (): T[] {
       const words: T[] = []
 
+      if (current >= tokens.length) {
+        throw new SyntaxError(`Unexpected end reached, expected to find the ${from}'s ${type}.
+Valid types: ` + Array.from(types.values()).join(', '))
+      }
+
       if (!types.has(tokens[current].type)) {
-        throw NewSyntaxError(from, type, {
-          expected: Array.from(types.values()).map(type => `"${type}"`).join(', '),
+        throw NewUnexpectedTokenErr(from, type, {
+          expected: Array.from(types.values()).join(', '),
           got: tokens[current].type,
-          'with value': tokens[current].value
+          'with value': '"' + tokens[current].value + '"'
         })
       }
 
@@ -117,8 +125,15 @@ export default function Syntaxer (tokens: Token[]): Filter {
       if (current === tokens.length) break
 
       const next_operators = interpret_filter_operator()
+
+      if (current === tokens.length) {
+        throw NewSyntaxErr('A filter operator can\'t be the end of a filter', {
+          'found operator': next_operators[0].value
+        })
+      }
+
       if (next_operators.length !== 1) {
-        throw NewSyntaxError('filter', 'operator', {
+        throw NewUnexpectedTokenErr('filter', 'operator', {
           expected: '1 operator',
           found: `${next_operators.length} operators`,
           'with values': next_operators.map(o => o.value).join(', ')
