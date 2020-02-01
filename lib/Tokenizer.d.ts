@@ -13,12 +13,12 @@ export declare enum Logical_Operator {
     And = "and"
 }
 export declare enum Text_Type {
-    Word = "word",
+    Remaining = "remaining",
     Number = "number"
 }
 export declare type Token_Type = Text_Type | Logical_Operator | Comparison_Operator;
 export declare const Token_Type: {
-    Word: Text_Type.Word;
+    Remaining: Text_Type.Remaining;
     Number: Text_Type.Number;
     Or: Logical_Operator.Or;
     And: Logical_Operator.And;

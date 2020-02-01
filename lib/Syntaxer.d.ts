@@ -17,7 +17,7 @@ export declare const Condition_Operator_Part_Type: {
 };
 export declare type Condition_Text_Part_Type = Text_Type;
 export declare const Condition_Text_Part_Type: {
-    Word: Text_Type.Word;
+    Remaining: Text_Type.Remaining;
     Number: Text_Type.Number;
 };
 export declare enum Condition_Type {
@@ -34,33 +34,37 @@ export declare const Node_Type: {
     Lower: Comparison_Operator.Lower;
     Lower_or_equal: Comparison_Operator.Lower_or_equal;
     Not: Comparison_Operator.Not;
-    Word: Text_Type.Word;
+    Remaining: Text_Type.Remaining;
     Number: Text_Type.Number;
     Filter: Condition_Type.Filter;
     Condition: Condition_Type.Condition;
     Or: Logical_Operator.Or;
     And: Logical_Operator.And;
 };
-interface Node {
+export interface Node {
     type: Node_Type;
 }
-interface Value_Node extends Node {
+export interface Value_Node extends Node {
     value: string;
 }
-interface Condition_Text_Part extends Value_Node {
+export interface Condition_Text_Part extends Value_Node {
     type: Condition_Text_Part_Type;
 }
-interface Condition_Operator_Part extends Value_Node {
+export interface Condition_Operator_Part extends Value_Node {
     type: Condition_Operator_Part_Type;
 }
-interface Condition extends Node {
+export interface Condition extends Node {
     type: Condition_Type.Condition;
     attribute: Condition_Text_Part[];
     operator: Condition_Operator_Part[];
     value: Condition_Text_Part[];
 }
+export interface Filter_Operator extends Value_Node {
+    type: Filter_Operator_Type;
+    values: string[];
+}
 declare type FilterConditions = Array<Condition | Filter>;
-interface Filter extends Node {
+export interface Filter extends Node {
     type: Condition_Type.Filter;
     operator: Filter_Operator_Type;
     conditions: FilterConditions;

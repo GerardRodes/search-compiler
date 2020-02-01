@@ -1,3 +1,1 @@
-import Tokenizer from './Tokenizer';
-export * from './Tokenizer';
-export { Tokenizer };
+export default function SearchCompiler(input: string): string;

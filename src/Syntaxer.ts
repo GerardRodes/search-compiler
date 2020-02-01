@@ -22,35 +22,35 @@ export const Node_Type = {
   ...Condition_Operator_Part_Type
 }
 
-interface Node {
+export interface Node {
   type: Node_Type
 }
 
-interface Value_Node extends Node {
+export interface Value_Node extends Node {
   value: string
 }
-interface Condition_Text_Part extends Value_Node {
+export interface Condition_Text_Part extends Value_Node {
   type: Condition_Text_Part_Type
 }
 
-interface Condition_Operator_Part extends Value_Node {
+export interface Condition_Operator_Part extends Value_Node {
   type: Condition_Operator_Part_Type
 }
 
-interface Condition extends Node {
+export interface Condition extends Node {
   type: Condition_Type.Condition
   attribute: Condition_Text_Part[]
   operator: Condition_Operator_Part[]
   value: Condition_Text_Part[]
 }
 
-interface Filter_Operator extends Value_Node {
+export interface Filter_Operator extends Value_Node {
   type: Filter_Operator_Type
   values: string []
 }
 
 type FilterConditions = Array<Condition|Filter>
-interface Filter extends Node {
+export interface Filter extends Node {
   type: Condition_Type.Filter
   operator: Filter_Operator_Type
   conditions: FilterConditions

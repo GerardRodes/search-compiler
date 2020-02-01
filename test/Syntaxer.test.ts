@@ -10,9 +10,9 @@ test('Syntaxer handles spaced tokens and operator aliases', t => {
       operator: Node_Type.Or,
       conditions: [{
         type: Node_Type.Condition,
-        attribute: [{ type: Node_Type.Word, value: 'last' }, { type: Node_Type.Word, value: 'name' }],
+        attribute: [{ type: Node_Type.Remaining, value: 'last' }, { type: Node_Type.Remaining, value: 'name' }],
         operator: [{ type: Node_Type.Equal, value: 'is' }],
-        value: [{ type: Node_Type.Word, value: 'bla' }, { type: Node_Type.Word, value: 'blo' }]
+        value: [{ type: Node_Type.Remaining, value: 'bla' }, { type: Node_Type.Remaining, value: 'blo' }]
       }]
     }
 
@@ -26,15 +26,15 @@ test('Syntaxer handles filter as condition', t => {
     conditions: [
       {
         type: Node_Type.Condition,
-        attribute: [{ type: Node_Type.Word, value: 'last' }, { type: Node_Type.Word, value: 'name' }],
+        attribute: [{ type: Node_Type.Remaining, value: 'last' }, { type: Node_Type.Remaining, value: 'name' }],
         operator: [{ type: Node_Type.Equal, value: 'is' }],
-        value: [{ type: Node_Type.Word, value: 'bla' }, { type: Node_Type.Word, value: 'blo' }]
+        value: [{ type: Node_Type.Remaining, value: 'bla' }, { type: Node_Type.Remaining, value: 'blo' }]
       },
       {
         type: Node_Type.Condition,
-        attribute: [{ type: Node_Type.Word, value: 'first' }, { type: Node_Type.Word, value: 'name' }],
+        attribute: [{ type: Node_Type.Remaining, value: 'first' }, { type: Node_Type.Remaining, value: 'name' }],
         operator: [{ type: Node_Type.Equal, value: '=' }],
-        value: [{ type: Node_Type.Word, value: 'blu' }, { type: Node_Type.Word, value: 'ble' }]
+        value: [{ type: Node_Type.Remaining, value: 'blu' }, { type: Node_Type.Remaining, value: 'ble' }]
       }
     ]
   })
@@ -50,15 +50,15 @@ test('Syntaxer handles spaced multiple conditions', t => {
       conditions: [
         {
           type: Node_Type.Condition,
-          attribute: [{ type: Node_Type.Word, value: 'last' }, { type: Node_Type.Word, value: 'name' }],
+          attribute: [{ type: Node_Type.Remaining, value: 'last' }, { type: Node_Type.Remaining, value: 'name' }],
           operator: [{ type: Node_Type.Equal, value: 'is' }],
-          value: [{ type: Node_Type.Word, value: 'bla' }, { type: Node_Type.Word, value: 'blo' }]
+          value: [{ type: Node_Type.Remaining, value: 'bla' }, { type: Node_Type.Remaining, value: 'blo' }]
         },
         {
           type: Node_Type.Condition,
-          attribute: [{ type: Node_Type.Word, value: 'first' }, { type: Node_Type.Word, value: 'name' }],
+          attribute: [{ type: Node_Type.Remaining, value: 'first' }, { type: Node_Type.Remaining, value: 'name' }],
           operator: [{ type: Node_Type.Equal, value: '=' }],
-          value: [{ type: Node_Type.Word, value: 'blu' }, { type: Node_Type.Word, value: 'ble' }]
+          value: [{ type: Node_Type.Remaining, value: 'blu' }, { type: Node_Type.Remaining, value: 'ble' }]
         }
       ]
     }]
@@ -76,23 +76,23 @@ test('Syntaxer handles filter as condition with different operators', t => {
         conditions: [
           {
             type: Node_Type.Condition,
-            attribute: [{ type: Node_Type.Word, value: 'last' }, { type: Node_Type.Word, value: 'name' }],
+            attribute: [{ type: Node_Type.Remaining, value: 'last' }, { type: Node_Type.Remaining, value: 'name' }],
             operator: [{ type: Node_Type.Equal, value: 'is' }],
-            value: [{ type: Node_Type.Word, value: 'bla' }, { type: Node_Type.Word, value: 'blo' }]
+            value: [{ type: Node_Type.Remaining, value: 'bla' }, { type: Node_Type.Remaining, value: 'blo' }]
           },
           {
             type: Node_Type.Condition,
-            attribute: [{ type: Node_Type.Word, value: 'first' }, { type: Node_Type.Word, value: 'name' }],
+            attribute: [{ type: Node_Type.Remaining, value: 'first' }, { type: Node_Type.Remaining, value: 'name' }],
             operator: [{ type: Node_Type.Equal, value: '=' }],
-            value: [{ type: Node_Type.Word, value: 'blu' }, { type: Node_Type.Word, value: 'ble' }]
+            value: [{ type: Node_Type.Remaining, value: 'blu' }, { type: Node_Type.Remaining, value: 'ble' }]
           }
         ]
       },
       {
         type: Node_Type.Condition,
-        attribute: [{ type: Node_Type.Word, value: 'color' }],
+        attribute: [{ type: Node_Type.Remaining, value: 'color' }],
         operator: [{ type: Node_Type.Includes, value: 'has' }],
-        value: [{ type: Node_Type.Word, value: 'blue' }]
+        value: [{ type: Node_Type.Remaining, value: 'blue' }]
       }
     ]
   })
@@ -103,16 +103,16 @@ test('Syntaxer handles A or B and C or D', t => {
     type: Node_Type.Filter,
     operator: Filter_Operator_Type.Or,
     conditions: [
-      { type: Node_Type.Condition, attribute: [{ type: Node_Type.Word, value: 'A' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Word, value: 'a' }] },
+      { type: Node_Type.Condition, attribute: [{ type: Node_Type.Remaining, value: 'A' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Remaining, value: 'a' }] },
       {
         type: Node_Type.Filter,
         operator: Filter_Operator_Type.And,
         conditions: [
-          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Word, value: 'B' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Word, value: 'b' }] },
-          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Word, value: 'C' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Word, value: 'c' }] }
+          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Remaining, value: 'B' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Remaining, value: 'b' }] },
+          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Remaining, value: 'C' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Remaining, value: 'c' }] }
         ]
       },
-      { type: Node_Type.Condition, attribute: [{ type: Node_Type.Word, value: 'D' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Word, value: 'd' }] }
+      { type: Node_Type.Condition, attribute: [{ type: Node_Type.Remaining, value: 'D' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Remaining, value: 'd' }] }
     ]
   })
 })
@@ -126,16 +126,16 @@ test('Syntaxer handles A and B or C and D', t => {
         type: Node_Type.Filter,
         operator: Filter_Operator_Type.And,
         conditions: [
-          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Word, value: 'A' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Word, value: 'a' }] },
-          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Word, value: 'B' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Word, value: 'b' }] }
+          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Remaining, value: 'A' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Remaining, value: 'a' }] },
+          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Remaining, value: 'B' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Remaining, value: 'b' }] }
         ]
       },
       {
         type: Node_Type.Filter,
         operator: Filter_Operator_Type.And,
         conditions: [
-          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Word, value: 'C' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Word, value: 'c' }] },
-          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Word, value: 'D' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Word, value: 'd' }] }
+          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Remaining, value: 'C' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Remaining, value: 'c' }] },
+          { type: Node_Type.Condition, attribute: [{ type: Node_Type.Remaining, value: 'D' }], operator: [{ type: Node_Type.Equal, value: '=' }], value: [{ type: Node_Type.Remaining, value: 'd' }] }
         ]
       }
     ]

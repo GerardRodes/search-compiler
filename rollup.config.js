@@ -5,7 +5,9 @@ export default {
   input: [
     'src/SearchCompiler.ts',
     'src/Syntaxer.ts',
-    'src/Tokenizer.ts'
+    'src/Tokenizer.ts',
+    'src/Semantiker.ts',
+    'src/outputs/JSONFilter.ts'
   ],
   output: {
     dir: 'lib',

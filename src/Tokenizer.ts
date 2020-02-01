@@ -15,7 +15,7 @@ export enum Logical_Operator {
 }
 
 export enum Text_Type {
-  Word = 'word',
+  Remaining = 'remaining',
   Number = 'number',
 }
 
@@ -56,13 +56,13 @@ export default function Tokenizer (input: string): Token[] {
   }
 
   const read_number = Read_Factory(is_number)
-  const read_word = Read_Factory(is_alpha)
+  const read_remaining = Read_Factory(is_remaining)
   const read_operator = Read_Factory(is_operator)
 
   function next_token (): Token {
     const token: Token = {
       value: '',
-      type: Token_Type.Word
+      type: Token_Type.Remaining
     }
 
     if (is_number(input[current])) {
@@ -71,86 +71,86 @@ export default function Tokenizer (input: string): Token[] {
       return token
     }
 
-    if (is_alpha(input[current])) {
-      token.value = read_word()
+    if (is_operator(input[current])) {
+      // here only valid operators are allowed
+      token.value = read_operator()
 
-      // check if is operator alias
       switch (token.value) {
-        case 'is':
-        case 'equal':
+        case '=':
+        case '==':
           token.type = Token_Type.Equal
           break
 
-        case 'includes':
-        case 'contains':
-        case 'has':
-        case 'in':
-          token.type = Token_Type.Includes
+        case '!=':
+          token.type = Token_Type.Not_equal
           break
 
-        case 'or':
+        case '||':
           token.type = Token_Type.Or
           break
 
-        case 'and':
+        case '&&':
           token.type = Token_Type.And
           break
 
-        case 'not':
+        case '!':
           token.type = Token_Type.Not
           break
 
-        default:
-          token.type = Token_Type.Word
+        case '>':
+          token.type = Token_Type.Greater
           break
+
+        case '<':
+          token.type = Token_Type.Lower
+          break
+
+        case '>=':
+          token.type = Token_Type.Greater_or_equal
+          break
+
+        case '<=':
+          token.type = Token_Type.Lower_or_equal
+          break
+
+        default:
+          throw new TypeError(`Unknown operator "${token.value}"`)
       }
 
       return token
     }
 
-    // here only valid operators are allowed
-    token.value = read_operator()
+    token.value = read_remaining()
 
-    switch (token.value) {
-      case '=':
-      case '==':
+    // check if is operator alias
+    switch (token.value.toLowerCase()) {
+      case 'is':
+      case 'equal':
         token.type = Token_Type.Equal
         break
 
-      case '!=':
-        token.type = Token_Type.Not_equal
+      case 'includes':
+      case 'contains':
+      case 'has':
+      case 'in':
+        token.type = Token_Type.Includes
         break
 
-      case '||':
+      case 'or':
         token.type = Token_Type.Or
         break
 
-      case '&&':
+      case 'and':
         token.type = Token_Type.And
         break
 
-      case '!':
+      case 'not':
         token.type = Token_Type.Not
         break
 
-      case '>':
-        token.type = Token_Type.Greater
-        break
-
-      case '<':
-        token.type = Token_Type.Lower
-        break
-
-      case '>=':
-        token.type = Token_Type.Greater_or_equal
-        break
-
-      case '<=':
-        token.type = Token_Type.Lower_or_equal
-        break
-
       default:
-        throw new TypeError(`Unknown operator "${token.value}"`)
+        token.type = Token_Type.Remaining
+        break
     }
 
     return token
@@ -170,15 +170,16 @@ function is_break (char: string): boolean {
   return breaks.has(char)
 }
 
+const numbers = new Set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ',', '_'])
 function is_number (char: string): boolean {
-  return (char >= '0' && char <= '9') || char === '.' || char === ',' || char === '_'
-}
-
-function is_alpha (char: string): boolean {
-  return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')
+  return numbers.has(char)
 }
 
 const operators = new Set(['=', '!', '|', '&', '>', '<'])
 function is_operator (char: string): boolean {
   return operators.has(char)
+}
+
+function is_remaining (char: string): boolean {
+  return !(is_break(char) || is_operator(char))
 }
