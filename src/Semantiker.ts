@@ -1,17 +1,27 @@
-import { Logical_Operator, Comparison_Operator } from './Tokenizer'
-import * as Syntaxer from './Syntaxer'
+import {
+  Condition_Operator_Part_Type,
+  Filter_Operator_Type,
+  Syntax_Tree,
+  Syntax_Node,
+  Condition_Text_Part,
+  Condition_Operator_Part
+} from './Syntaxer'
 
+export interface Condition_Operator {
+  type: Condition_Operator_Part_Type
+  negated: boolean
+}
 export interface Condition {
   type: 'condition'
   attribute: string
-  operator: Comparison_Operator
   value: string|number
+  operator: Condition_Operator
 }
 
 export interface Filter {
   type: 'filter'
-  operator: Logical_Operator
-  conditions: Condition[]
+  operator: Filter_Operator_Type
+  conditions: Array<Condition|Filter>
 }
 
 export type Node = Filter | Condition
@@ -24,13 +34,13 @@ export interface Semantic_Tree {
   - replace name for attr with map of { name: attr }
   - transform measurements with Measurement(number, measure)
 */
-export default function Semantiker (syntax_tree: Syntaxer.Syntax_Tree): Semantic_Tree {
+export default function Semantiker (syntax_tree: Syntax_Tree): Semantic_Tree {
   return {
     filter: walk_tree(syntax_tree.filter) as Filter
   }
 }
 
-function walk_tree (syntax_node: Syntaxer.Syntax_Node): Node {
+function walk_tree (syntax_node: Syntax_Node): Node {
   if (syntax_node.type === 'filter') {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {
@@ -50,36 +60,53 @@ function walk_tree (syntax_node: Syntaxer.Syntax_Node): Node {
   }
 }
 
-function generate_attribute (parts: Syntaxer.Condition_Text_Part[]): string {
+function generate_attribute (parts: Condition_Text_Part[]): string {
   return parts.map(part => part.value.toLowerCase()).join('_')
 }
 
-function generate_operator (parts: Syntaxer.Condition_Operator_Part[]): Comparison_Operator {
+function generate_operator (parts: Condition_Operator_Part[]): Condition_Operator {
   if (parts.length === 1) {
-    return parts[0].type
+    return { type: parts[0].type, negated: false }
   }
 
   const values = new Set(parts.map(part => part.type))
+  const negated = values.has(Condition_Operator_Part_Type.Not)
 
-  if (values.size === 1) return values.values().next().value
-  if (values.size === 2 && values.has(Comparison_Operator.Not)) {
-    values.delete(Comparison_Operator.Not)
+  if (negated) {
+    values.delete(Condition_Operator_Part_Type.Not)
+  }
 
-    const operator: Comparison_Operator = values.values().next().value
-    switch (operator) {
-      case Comparison_Operator.Equal:
-        return Comparison_Operator.Not_equal
-      case Comparison_Operator.Includes:
-        return Comparison_Operator.Not_includes
+  const type = Condition_Operator_Part_Type.Equal
+  values.delete(Condition_Operator_Part_Type.Equal)
 
-      default:
-        throw new Error(`[Semantiker] Operator "${operator}" cannot be negated`)
+  if (values.size === 0) return { type, negated }
+
+  if (values.has(Condition_Operator_Part_Type.Or)) {
+    if (values.has(Condition_Operator_Part_Type.Greater)) {
+      return {
+        type: Condition_Operator_Part_Type.Greater_or_equal,
+        negated
+      }
+    } else if (values.has(Condition_Operator_Part_Type.Lower)) {
+      return {
+        type: Condition_Operator_Part_Type.Lower_or_equal,
+        negated
+      }
+    } else {
+      throw new SyntaxError('[Semantiker] A condition operator with and "or" must include also "greater" or "lower"')
     }
   }
 
-  return Comparison_Operator.Equal
+  if (values.size !== 1) {
+    throw new SyntaxError(`[Semantiker] Found two incompatible operators on condition "${Array.from(values.values()).join(', ')}"`)
+  }
+
+  return {
+    type: values.values().next().value,
+    negated
+  }
 }
 
-function generate_value (parts: Syntaxer.Condition_Text_Part[]): string {
+function generate_value (parts: Condition_Text_Part[]): string {
   return parts.map(part => part.value).join(' ')
 }
