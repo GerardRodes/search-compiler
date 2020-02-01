@@ -69,5 +69,8 @@ export interface Filter extends Node {
     operator: Filter_Operator_Type;
     conditions: FilterConditions;
 }
-export default function Syntaxer(tokens: Token[]): Filter;
+export interface SyntaxTree {
+    filter: Filter;
+}
+export default function Syntaxer(tokens: Token[]): SyntaxTree;
 export {};

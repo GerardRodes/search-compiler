@@ -56,6 +56,10 @@ export interface Filter extends Node {
   conditions: FilterConditions
 }
 
+export interface SyntaxTree {
+  filter: Filter
+}
+
 const filter_operator_token_types: Set<Token_Type> = new Set(Object.values(Filter_Operator_Type) as Token_Type[])
 const condition_operator_part_token_types: Set<Token_Type> = new Set(Object.values(Condition_Operator_Part_Type) as Token_Type[])
 const condition_text_part_token_types: Set<Token_Type> = new Set(Object.values(Condition_Text_Part_Type) as Token_Type[])
@@ -69,7 +73,12 @@ function NewUnexpectedTokenErr (scope: string, part: string, explanation: {[key:
   return NewSyntaxErr(`Unexpected token interpreting ${scope}'s ${part}`, explanation)
 }
 
-export default function Syntaxer (tokens: Token[]): Filter {
+/* @todo: autocompletion of:
+    - attributes: map of { name: attr }
+    - operators: we already have that
+    - values: map of { attr: possible_values[] }
+*/
+export default function Syntaxer (tokens: Token[]): SyntaxTree {
   let current = 0
 
   function Interpreter_Factory <T extends Value_Node> (types: Set<Token_Type>, type: string, from: string): () => T[] {
@@ -153,5 +162,5 @@ Valid types: ` + Array.from(types.values()).join(', '))
     return filter
   }
 
-  return interpret_filter(Filter_Operator_Type.Or, [])
+  return { filter: interpret_filter(Filter_Operator_Type.Or, []) }
 }
