@@ -17,6 +17,34 @@ test('Syntaxer handles spaced tokens and operator aliases', t => {
   })
 })
 
+test('Syntaxer handles condition operator with filter operators', t => {
+  t.deepEqual(Syntaxer(Tokenizer('a is equal or more 1mb')), {
+    filter: {
+      type: Node_Type.Filter,
+      operator: Node_Type.Or,
+      conditions: [{
+        type: Node_Type.Condition,
+        attribute: [{ type: Node_Type.Remaining, value: 'a' }],
+        operator: [{ type: Node_Type.Equal, value: 'is' }, { type: Node_Type.Equal, value: 'equal' }, { type: Node_Type.Or, value: 'or' }, { type: Node_Type.Greater, value: 'more' }],
+        value: [{ type: Node_Type.Number, value: '1' }, { type: Node_Type.Remaining, value: 'mb' }]
+      }]
+    }
+  })
+
+  t.deepEqual(Syntaxer(Tokenizer('a is equal or less 1mb')), {
+    filter: {
+      type: Node_Type.Filter,
+      operator: Node_Type.Or,
+      conditions: [{
+        type: Node_Type.Condition,
+        attribute: [{ type: Node_Type.Remaining, value: 'a' }],
+        operator: [{ type: Node_Type.Equal, value: 'is' }, { type: Node_Type.Equal, value: 'equal' }, { type: Node_Type.Or, value: 'or' }, { type: Node_Type.Lower, value: 'less' }],
+        value: [{ type: Node_Type.Number, value: '1' }, { type: Node_Type.Remaining, value: 'mb' }]
+      }]
+    }
+  })
+})
+
 test('Syntaxer handles filter as condition', t => {
   t.deepEqual(Syntaxer(Tokenizer('last name is bla blo or first name = blu ble')), {
     filter: {

@@ -1,5 +1,6 @@
 export declare enum Comparison_Operator {
     Includes = "includes",
+    Not_includes = "not_includes",
     Equal = "equal",
     Not_equal = "not_equal",
     Greater = "greater",
@@ -23,6 +24,7 @@ export declare const Token_Type: {
     Or: Logical_Operator.Or;
     And: Logical_Operator.And;
     Includes: Comparison_Operator.Includes;
+    Not_includes: Comparison_Operator.Not_includes;
     Equal: Comparison_Operator.Equal;
     Not_equal: Comparison_Operator.Not_equal;
     Greater: Comparison_Operator.Greater;

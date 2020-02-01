@@ -1,5 +1,6 @@
 export enum Comparison_Operator {
   Includes = 'includes',
+  Not_includes = 'not_includes',
   Equal = 'equal',
   Not_equal = 'not_equal',
   Greater = 'greater',
@@ -134,6 +135,18 @@ export default function Tokenizer (input: string): Token[] {
       case 'has':
       case 'in':
         token.type = Token_Type.Includes
+        break
+
+      case 'greater':
+      case 'more':
+      case 'above':
+        token.type = Token_Type.Greater
+        break
+
+      case 'lower':
+      case 'less':
+      case 'below':
+        token.type = Token_Type.Lower
         break
 
       case 'or':

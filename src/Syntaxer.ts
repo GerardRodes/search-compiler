@@ -3,8 +3,8 @@ import { Token, Token_Type, Text_Type, Comparison_Operator, Logical_Operator } f
 export type Filter_Operator_Type = Logical_Operator
 export const Filter_Operator_Type = { ...Logical_Operator }
 
-export type Condition_Operator_Part_Type = Comparison_Operator
-export const Condition_Operator_Part_Type = { ...Comparison_Operator }
+export type Condition_Operator_Part_Type = Comparison_Operator | Logical_Operator
+export const Condition_Operator_Part_Type = { ...Comparison_Operator, ...Logical_Operator }
 
 export type Condition_Text_Part_Type = Text_Type
 export const Condition_Text_Part_Type = { ...Text_Type }
@@ -22,13 +22,11 @@ export const Node_Type = {
   ...Condition_Operator_Part_Type
 }
 
-export interface Node {
+export interface Value_Node {
+  value: string
   type: Node_Type
 }
 
-export interface Value_Node extends Node {
-  value: string
-}
 export interface Condition_Text_Part extends Value_Node {
   type: Condition_Text_Part_Type
 }
@@ -37,7 +35,7 @@ export interface Condition_Operator_Part extends Value_Node {
   type: Condition_Operator_Part_Type
 }
 
-export interface Condition extends Node {
+export interface Condition {
   type: Condition_Type.Condition
   attribute: Condition_Text_Part[]
   operator: Condition_Operator_Part[]
@@ -50,13 +48,15 @@ export interface Filter_Operator extends Value_Node {
 }
 
 type FilterConditions = Array<Condition|Filter>
-export interface Filter extends Node {
+export interface Filter {
   type: Condition_Type.Filter
   operator: Filter_Operator_Type
   conditions: FilterConditions
 }
 
-export interface SyntaxTree {
+export type Syntax_Node = Condition_Text_Part | Condition_Operator_Part | Condition | Filter_Operator | Filter
+
+export interface Syntax_Tree {
   filter: Filter
 }
 
@@ -78,7 +78,7 @@ function NewUnexpectedTokenErr (scope: string, part: string, explanation: {[key:
     - operators: we already have that
     - values: map of { attr: possible_values[] }
 */
-export default function Syntaxer (tokens: Token[]): SyntaxTree {
+export default function Syntaxer (tokens: Token[]): Syntax_Tree {
   let current = 0
 
   function Interpreter_Factory <T extends Value_Node> (types: Set<Token_Type>, type: string, from: string): () => T[] {
