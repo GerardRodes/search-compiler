@@ -3,7 +3,7 @@ import Tokenizer, { Logical_Operator, Comparison_Operator } from '../lib/Tokeniz
 import Syntaxer from '../lib/Syntaxer'
 import Semantiker from '../lib/Semantiker'
 
-test('Semantiker compound operatores', t => {
+test('Semantiker generates operators', t => {
   t.deepEqual(Semantiker(Syntaxer(Tokenizer('last name is not bla blo'))), {
     filter: {
       type: 'filter',
@@ -203,6 +203,24 @@ test('Semantiker compound operatores', t => {
           }
         }
       ]
+    }
+  })
+})
+
+test('Semantiker generates attributes', t => {
+  t.deepEqual(Semantiker(Syntaxer(Tokenizer('last name is a'))), {
+    filter: {
+      type: 'filter',
+      operator: Logical_Operator.Or,
+      conditions: [{
+        type: 'condition',
+        attribute: 'last_name',
+        value: 'a',
+        operator: {
+          type: Comparison_Operator.Equal,
+          negated: false
+        }
+      }]
     }
   })
 })
