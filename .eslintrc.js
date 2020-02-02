@@ -5,8 +5,6 @@ module.exports = {
   },
   rules: {
     '@typescript-eslint/camelcase': 'off',
-    '@typescript-eslint/restrict-template-expressions': [1, {
-      allowNumber: true
-    }]
+    '@typescript-eslint/restrict-template-expressions': 'off'
   }
 }
