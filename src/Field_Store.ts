@@ -13,7 +13,7 @@ export default class Field_Store {
   by_attr: {[key: string]: Field_Definition} = {}
   by_name: {[key: string]: Field_Definition} = {}
 
-  constructor (fields: Field_Definition[]) {
+  constructor (fields: Field_Definition[] = []) {
     this.fields = fields
 
     for (const field of fields) {

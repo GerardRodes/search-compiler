@@ -14,6 +14,6 @@ export default class Field_Store {
     by_name: {
         [key: string]: Field_Definition;
     };
-    constructor(fields: Field_Definition[]);
+    constructor(fields?: Field_Definition[]);
     find(parts: Condition_Text_Part[]): Field_Definition | undefined;
 }

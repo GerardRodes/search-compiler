@@ -4,7 +4,6 @@ import {
   Filter_Operator_Type,
   Syntax_Tree,
   Syntax_Node,
-  Condition_Text_Part,
   Condition_Operator_Part
 } from './Syntaxer'
 
@@ -12,10 +11,17 @@ export interface Condition_Operator {
   type: Condition_Operator_Part_Type
   negated: boolean
 }
+
+export interface Condition_Value {
+  type: string
+  value: string|number
+  parts: string[]
+}
+
 export interface Condition {
   type: 'condition'
   attribute: string
-  value: string|number
+  value: Condition_Value
   operator: Condition_Operator
 }
 
@@ -41,7 +47,7 @@ export default function Semantiker (syntax_tree: Syntax_Tree, field_store: Field
   }
 }
 
-function walk_tree (syntax_node: Syntax_Node, field_store: Field_Store): Node {
+function walk_tree (syntax_node: Syntax_Node, field_store: Field_Store = new Field_Store()): Node {
   if (syntax_node.type === 'filter') {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {
@@ -54,24 +60,21 @@ function walk_tree (syntax_node: Syntax_Node, field_store: Field_Store): Node {
   if (syntax_node.type !== 'condition') throw new TypeError(`[Semantiker] Expected condition node but found ${syntax_node.type}`)
 
   const field = field_store.find(syntax_node.attribute)
+  const parts = syntax_node.value.map(part => part.value)
   return {
     type: 'condition',
     attribute: field != null
       ? field.attribute
-      : generate_attribute(syntax_node.attribute),
+      : syntax_node.attribute.map(part => part.value.toLowerCase()).join('_'),
     operator: generate_operator(syntax_node.operator),
-    value: field?.measurement != null
-      ? field.measurement.parse(syntax_node.value) ?? generate_value(syntax_node.value)
-      : generate_value(syntax_node.value)
+    value: field?.measurement == null
+      ? { type: 'raw', parts, value: parts.join(' ') }
+      : {
+        type: field.measurement.name,
+        parts,
+        value: field.measurement.parse(syntax_node.value)
+      }
   }
-}
-
-function generate_attribute (parts: Condition_Text_Part[]): string {
-  return parts.map(part => part.value.toLowerCase()).join('_')
-}
-
-function generate_value (parts: Condition_Text_Part[]): string {
-  return parts.map(part => part.value).join(' ')
 }
 
 function generate_operator (parts: Condition_Operator_Part[]): Condition_Operator {

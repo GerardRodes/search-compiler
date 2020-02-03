@@ -25,6 +25,11 @@
       box-shadow: 0 0 1px #000;
       border-radius: 3px 3px 0 0;
     }
+
+    .box {
+      width: 25%;
+      padding: 1px;
+    }
   </style>
 </head>
 <body>
@@ -34,22 +39,26 @@
         width: 100%;
       "
       id="input"
-    >A=a and B >b or D is d</textarea>
+    >duration is 1 hour and speed is above 1 Mb/s and size is below 1Gb</textarea>
 
     <div style="
       display: flex;
       width: 100%;
       justify-content: space-between;
     ">
-      <div style="width: 30%;">
+      <div class="box">
         <div class="section-title">Tokens</div>
         <div id="tokens" class="output"></div>
       </div>
-      <div style="width: 30%;">
+      <div class="box">
         <div class="section-title">AST</div>
         <div id="ast" class="output"></div>
       </div>
-      <div style="width: 30%;">
+      <div class="box">
+        <div class="section-title">ST</div>
+        <div id="st" class="output"></div>
+      </div>
+      <div class="box">
         <div class="section-title">Output</div>
         <div id="filter" class="output"></div>
       </div>
@@ -59,10 +68,34 @@
   <script type="module">
     import Tokenizer from './lib/Tokenizer.js'
     import Syntaxer from './lib/Syntaxer.js'
+    import Semantiker from './lib/Semantiker.js'
+    import Field_Store from './lib/Field_Store.js'
+    import Time from './lib/Time.js'
+    import Data_Storage from './lib/Data_Storage.js'
+    import Data_Transmision from './lib/Data_Transmision.js'
 
     const $input = document.getElementById('input')
     const $tokens = document.getElementById('tokens')
     const $ast = document.getElementById('ast')
+    const $st = document.getElementById('st')
+
+    const field_store = new Field_Store([
+      {
+        name: 'Duration',
+        attribute: 'duration',
+        measurement: new Time()
+      },
+      {
+        name: 'Size',
+        attribute: 'size',
+        measurement: new Data_Storage()
+      },
+      {
+        name: 'Speed',
+        attribute: 'speed',
+        measurement: new Data_Transmision()
+      }
+    ])
 
     function printOutputs () {
       try {
@@ -74,6 +107,14 @@
           const ast = Syntaxer(tokens)
           console.log({ast})
           $ast.innerText = JSON.stringify(ast, null, 2)
+
+          try {
+            const st = Semantiker(ast, field_store)
+            console.log({st})
+            $st.innerText = JSON.stringify(st, null, 2)
+          } catch (e) {
+            $st.innerText = e.message
+          }
         } catch (e) {
           $ast.innerText = e.message
         }

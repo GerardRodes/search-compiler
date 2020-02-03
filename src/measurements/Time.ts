@@ -3,6 +3,7 @@ import { Condition_Text_Part, Condition_Text_Part_Type } from '../Syntaxer'
 import { parse_number } from '../Numbers'
 
 export default class Time extends Measurement {
+  name = 'Time'
   measures: Measure[] = [
     {
       name: 'millisecond',

@@ -2,6 +2,8 @@ import Data_Storage from './Data_Storage'
 import { Measure } from './Measurement'
 
 export default class Data_Transmision extends Data_Storage {
+  name = 'Data_Transmision'
+
   constructor () {
     super()
 

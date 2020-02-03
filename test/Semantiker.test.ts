@@ -36,9 +36,13 @@ test('Semantiker generates operators', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'last_name',
-        value: 'bla blo',
+        value: {
+          type: 'raw',
+          parts: ['bla', 'blo'],
+          value: 'bla blo'
+        },
         operator: {
           type: Comparison_Operator.Equal,
           negated: true
@@ -52,9 +56,13 @@ test('Semantiker generates operators', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'a',
-        value: 'b',
+        value: {
+          type: 'raw',
+          parts: ['b'],
+          value: 'b'
+        },
         operator: {
           type: Comparison_Operator.Equal,
           negated: false
@@ -68,9 +76,13 @@ test('Semantiker generates operators', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'a',
-        value: 'b',
+        value: {
+          type: 'raw',
+          parts: ['b'],
+          value: 'b'
+        },
         operator: {
           type: Comparison_Operator.Equal,
           negated: true
@@ -84,9 +96,13 @@ test('Semantiker generates operators', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'a',
-        value: 'b',
+        value: {
+          type: 'raw',
+          parts: ['b'],
+          value: 'b'
+        },
         operator: {
           type: Comparison_Operator.Includes,
           negated: false
@@ -100,9 +116,13 @@ test('Semantiker generates operators', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'a',
-        value: 'b',
+        value: {
+          type: 'raw',
+          parts: ['b'],
+          value: 'b'
+        },
         operator: {
           type: Comparison_Operator.Includes,
           negated: true
@@ -116,9 +136,13 @@ test('Semantiker generates operators', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'a',
-        value: 'b',
+        value: {
+          type: 'raw',
+          parts: ['b'],
+          value: 'b'
+        },
         operator: {
           type: Comparison_Operator.Greater,
           negated: false
@@ -132,9 +156,13 @@ test('Semantiker generates operators', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'a',
-        value: 'b',
+        value: {
+          type: 'raw',
+          parts: ['b'],
+          value: 'b'
+        },
         operator: {
           type: Comparison_Operator.Greater_or_equal,
           negated: false
@@ -148,9 +176,13 @@ test('Semantiker generates operators', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'a',
-        value: 'b',
+        value: {
+          type: 'raw',
+          parts: ['b'],
+          value: 'b'
+        },
         operator: {
           type: Comparison_Operator.Greater_or_equal,
           negated: false
@@ -164,9 +196,13 @@ test('Semantiker generates operators', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'a',
-        value: 'b',
+        value: {
+          type: 'raw',
+          parts: ['b'],
+          value: 'b'
+        },
         operator: {
           type: Comparison_Operator.Lower_or_equal,
           negated: false
@@ -180,9 +216,13 @@ test('Semantiker generates operators', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'a',
-        value: 'b',
+        value: {
+          type: 'raw',
+          parts: ['b'],
+          value: 'b'
+        },
         operator: {
           type: Comparison_Operator.Lower_or_equal,
           negated: true
@@ -197,22 +237,30 @@ test('Semantiker generates operators', t => {
       operator: Logical_Operator.Or,
       conditions: [
         {
-          type: 'filter',
+          type: 'filter' as const,
           operator: Logical_Operator.And,
           conditions: [
             {
-              type: 'condition',
+              type: 'condition' as const,
               attribute: 'a',
-              value: 'b',
+              value: {
+                type: 'raw',
+                parts: ['b'],
+                value: 'b'
+              },
               operator: {
                 type: Comparison_Operator.Lower_or_equal,
                 negated: true
               }
             },
             {
-              type: 'condition',
+              type: 'condition' as const,
               attribute: 'c',
-              value: 'a',
+              value: {
+                type: 'raw',
+                parts: ['a'],
+                value: 'a'
+              },
               operator: {
                 type: Comparison_Operator.Equal,
                 negated: false
@@ -221,9 +269,13 @@ test('Semantiker generates operators', t => {
           ]
         },
         {
-          type: 'condition',
+          type: 'condition' as const,
           attribute: 'a',
-          value: 'a',
+          value: {
+            type: 'raw',
+            parts: ['a'],
+            value: 'a'
+          },
           operator: {
             type: Comparison_Operator.Greater,
             negated: true
@@ -240,9 +292,13 @@ test('Semantiker generates attributes', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'appellido',
-        value: 'a',
+        value: {
+          type: 'raw',
+          parts: ['a'],
+          value: 'a'
+        },
         operator: {
           type: Comparison_Operator.Equal,
           negated: false
@@ -256,9 +312,13 @@ test('Semantiker generates attributes', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'last_name',
-        value: 'a',
+        value: {
+          type: 'raw',
+          parts: ['a'],
+          value: 'a'
+        },
         operator: {
           type: Comparison_Operator.Equal,
           negated: false
@@ -274,9 +334,13 @@ test('Semantiker generates measurement values', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'duration',
-        value: 60 * 60,
+        value: {
+          type: 'Time',
+          parts: ['1', 'hour'],
+          value: 60 * 60
+        },
         operator: {
           type: Comparison_Operator.Equal,
           negated: false
@@ -290,9 +354,13 @@ test('Semantiker generates measurement values', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'duration',
-        value: 60 * 60 * 24,
+        value: {
+          type: 'Time',
+          parts: ['1', 'day'],
+          value: 60 * 60 * 24
+        },
         operator: {
           type: Comparison_Operator.Equal,
           negated: false
@@ -306,9 +374,13 @@ test('Semantiker generates measurement values', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'size',
-        value: 8_000_000,
+        value: {
+          type: 'Data_Storage',
+          parts: ['1', 'MB'],
+          value: 8_000_000
+        },
         operator: {
           type: Comparison_Operator.Equal,
           negated: false
@@ -322,9 +394,13 @@ test('Semantiker generates measurement values', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'size',
-        value: 8,
+        value: {
+          type: 'Data_Storage',
+          parts: ['1', 'Byte'],
+          value: 8
+        },
         operator: {
           type: Comparison_Operator.Equal,
           negated: false
@@ -338,9 +414,13 @@ test('Semantiker generates measurement values', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'size',
-        value: 8 * Math.pow(2, 30),
+        value: {
+          type: 'Data_Storage',
+          parts: ['1', 'GiB'],
+          value: 8 * Math.pow(2, 30)
+        },
         operator: {
           type: Comparison_Operator.Equal,
           negated: false
@@ -354,9 +434,13 @@ test('Semantiker generates measurement values', t => {
       type: 'filter',
       operator: Logical_Operator.Or,
       conditions: [{
-        type: 'condition',
+        type: 'condition' as const,
         attribute: 'speed',
-        value: 8 * 1_000_000,
+        value: {
+          type: 'Data_Transmision',
+          parts: ['1', 'MBps'],
+          value: 8 * 1_000_000
+        },
         operator: {
           type: Comparison_Operator.Greater,
           negated: false

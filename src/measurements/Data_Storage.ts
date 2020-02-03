@@ -3,6 +3,7 @@ import { Condition_Text_Part, Condition_Text_Part_Type } from '../Syntaxer'
 import { parse_number } from '../Numbers'
 
 export default class Data_Storage extends Measurement {
+  name = 'Data_Storage'
   measures: Measure[] = [
     {
       name: 'bit',

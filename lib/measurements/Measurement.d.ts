@@ -12,6 +12,7 @@ export default class Measurement {
         [key: string]: Measure;
     };
     measures: Measure[];
+    name: string;
     init(): void;
     find(value: string): Measure | undefined;
     parse(parts: Condition_Text_Part[]): undefined | number | string;

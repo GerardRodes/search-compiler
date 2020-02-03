@@ -4,10 +4,15 @@ export interface Condition_Operator {
     type: Condition_Operator_Part_Type;
     negated: boolean;
 }
+export interface Condition_Value {
+    type: string;
+    value: string | number;
+    parts: string[];
+}
 export interface Condition {
     type: 'condition';
     attribute: string;
-    value: string | number;
+    value: Condition_Value;
     operator: Condition_Operator;
 }
 export interface Filter {

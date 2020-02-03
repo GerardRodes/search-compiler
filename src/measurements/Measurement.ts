@@ -10,10 +10,15 @@ export default class Measurement {
   by_name: {[key: string]: Measure} = {}
   by_abbreviation: {[key: string]: Measure} = {}
   measures: Measure[] = []
+  name: string
 
   init (): void {
     if (this.measures.length === 0) {
       throw new Error('Measures no initialized')
+    }
+
+    if (this.name == null) {
+      throw new Error('Name no initialized')
     }
 
     for (const measure of this.measures) {
