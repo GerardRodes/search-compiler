@@ -18,9 +18,14 @@ export interface Condition_Value {
   parts: string[]
 }
 
+export interface Condition_Attribute {
+  value: string
+  parts: string[]
+}
+
 export interface Condition {
   type: 'condition'
-  attribute: string
+  attribute: Condition_Attribute
   value: Condition_Value
   operator: Condition_Operator
 }
@@ -60,18 +65,22 @@ function walk_tree (syntax_node: Syntax_Node, field_store: Field_Store = new Fie
   if (syntax_node.type !== 'condition') throw new TypeError(`[Semantiker] Expected condition node but found ${syntax_node.type}`)
 
   const field = field_store.find(syntax_node.attribute)
-  const parts = syntax_node.value.map(part => part.value)
+  const value_parts = syntax_node.value.map(part => part.value)
+  const attr_parts = syntax_node.attribute.map(part => part.value)
   return {
     type: 'condition',
-    attribute: field != null
-      ? field.attribute
-      : syntax_node.attribute.map(part => part.value.toLowerCase()).join('_'),
+    attribute: {
+      parts: attr_parts,
+      value: field != null
+        ? field.attribute
+        : attr_parts.map(part => part.toLowerCase()).join('_')
+    },
     operator: generate_operator(syntax_node.operator),
     value: field?.measurement == null
-      ? { type: 'raw', parts, value: parts.join(' ') }
+      ? { type: 'raw', parts: value_parts, value: value_parts.join(' ') }
       : {
         type: field.measurement.name,
-        parts,
+        parts: value_parts,
         value: field.measurement.parse(syntax_node.value)
       }
   }

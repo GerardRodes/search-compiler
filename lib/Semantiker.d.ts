@@ -9,9 +9,13 @@ export interface Condition_Value {
     value: string | number;
     parts: string[];
 }
+export interface Condition_Attribute {
+    value: string;
+    parts: string[];
+}
 export interface Condition {
     type: 'condition';
-    attribute: string;
+    attribute: Condition_Attribute;
     value: Condition_Value;
     operator: Condition_Operator;
 }

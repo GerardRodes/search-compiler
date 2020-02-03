@@ -11,7 +11,7 @@ const empty_store = new Field_Store([])
 const field_store = new Field_Store([
   {
     name: 'Last name',
-    attribute: 'appellido'
+    attribute: 'apellido'
   },
   {
     name: 'Duration',
@@ -37,7 +37,7 @@ test('Semantiker generates operators', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'last_name',
+        attribute: { value: 'last_name', parts: ['last', 'name'] },
         value: {
           type: 'raw',
           parts: ['bla', 'blo'],
@@ -57,7 +57,7 @@ test('Semantiker generates operators', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'a',
+        attribute: { value: 'a', parts: ['a'] },
         value: {
           type: 'raw',
           parts: ['b'],
@@ -77,7 +77,7 @@ test('Semantiker generates operators', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'a',
+        attribute: { value: 'a', parts: ['a'] },
         value: {
           type: 'raw',
           parts: ['b'],
@@ -97,7 +97,7 @@ test('Semantiker generates operators', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'a',
+        attribute: { value: 'a', parts: ['a'] },
         value: {
           type: 'raw',
           parts: ['b'],
@@ -117,7 +117,7 @@ test('Semantiker generates operators', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'a',
+        attribute: { value: 'a', parts: ['a'] },
         value: {
           type: 'raw',
           parts: ['b'],
@@ -137,7 +137,7 @@ test('Semantiker generates operators', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'a',
+        attribute: { value: 'a', parts: ['a'] },
         value: {
           type: 'raw',
           parts: ['b'],
@@ -157,7 +157,7 @@ test('Semantiker generates operators', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'a',
+        attribute: { value: 'a', parts: ['a'] },
         value: {
           type: 'raw',
           parts: ['b'],
@@ -177,7 +177,7 @@ test('Semantiker generates operators', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'a',
+        attribute: { value: 'a', parts: ['a'] },
         value: {
           type: 'raw',
           parts: ['b'],
@@ -197,7 +197,7 @@ test('Semantiker generates operators', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'a',
+        attribute: { value: 'a', parts: ['a'] },
         value: {
           type: 'raw',
           parts: ['b'],
@@ -217,7 +217,7 @@ test('Semantiker generates operators', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'a',
+        attribute: { value: 'a', parts: ['a'] },
         value: {
           type: 'raw',
           parts: ['b'],
@@ -242,7 +242,7 @@ test('Semantiker generates operators', t => {
           conditions: [
             {
               type: 'condition' as const,
-              attribute: 'a',
+              attribute: { value: 'a', parts: ['a'] },
               value: {
                 type: 'raw',
                 parts: ['b'],
@@ -255,7 +255,7 @@ test('Semantiker generates operators', t => {
             },
             {
               type: 'condition' as const,
-              attribute: 'c',
+              attribute: { value: 'c', parts: ['c'] },
               value: {
                 type: 'raw',
                 parts: ['a'],
@@ -270,7 +270,7 @@ test('Semantiker generates operators', t => {
         },
         {
           type: 'condition' as const,
-          attribute: 'a',
+          attribute: { value: 'a', parts: ['a'] },
           value: {
             type: 'raw',
             parts: ['a'],
@@ -293,7 +293,7 @@ test('Semantiker generates attributes', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'appellido',
+        attribute: { value: 'apellido', parts: ['laSt', 'Name'] },
         value: {
           type: 'raw',
           parts: ['a'],
@@ -313,7 +313,7 @@ test('Semantiker generates attributes', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'last_name',
+        attribute: { value: 'last_name', parts: ['last', 'name'] },
         value: {
           type: 'raw',
           parts: ['a'],
@@ -335,7 +335,7 @@ test('Semantiker generates measurement values', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'duration',
+        attribute: { value: 'duration', parts: ['duration'] },
         value: {
           type: 'Time',
           parts: ['1', 'hour'],
@@ -355,7 +355,7 @@ test('Semantiker generates measurement values', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'duration',
+        attribute: { value: 'duration', parts: ['duration'] },
         value: {
           type: 'Time',
           parts: ['1', 'day'],
@@ -375,7 +375,7 @@ test('Semantiker generates measurement values', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'size',
+        attribute: { value: 'size', parts: ['size'] },
         value: {
           type: 'Data_Storage',
           parts: ['1', 'MB'],
@@ -395,7 +395,7 @@ test('Semantiker generates measurement values', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'size',
+        attribute: { value: 'size', parts: ['size'] },
         value: {
           type: 'Data_Storage',
           parts: ['1', 'Byte'],
@@ -415,7 +415,7 @@ test('Semantiker generates measurement values', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'size',
+        attribute: { value: 'size', parts: ['size'] },
         value: {
           type: 'Data_Storage',
           parts: ['1', 'GiB'],
@@ -435,7 +435,7 @@ test('Semantiker generates measurement values', t => {
       operator: Logical_Operator.Or,
       conditions: [{
         type: 'condition' as const,
-        attribute: 'speed',
+        attribute: { value: 'speed', parts: ['speed'] },
         value: {
           type: 'Data_Transmision',
           parts: ['1', 'MBps'],
