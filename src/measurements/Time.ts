@@ -53,10 +53,10 @@ export default class Time extends Measurement {
   parse (parts: Condition_Text_Part[]): number {
     if (parts.length === 1) {
       // todo: keywords
-      return 0
+      return parse_number(parts[0].value)
     }
 
-    // 1 hour ago
+    // todo: multiple parts like "1 hour ago"
     if (parts.length !== 2) return
 
     // expects number + remaining

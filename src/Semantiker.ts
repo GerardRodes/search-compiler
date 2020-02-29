@@ -76,7 +76,7 @@ function walk_tree (syntax_node: Syntax_Node, field_store: Field_Store): Node {
         : attr_parts.map(part => part.toLowerCase()).join('_')
     },
     operator: generate_operator(syntax_node.operator),
-    value: field?.measurement == null
+    value: field == null || field.measurement == null
       ? { type: 'raw', parts: value_parts, value: value_parts.join(' ') }
       : {
         type: field.measurement.name,

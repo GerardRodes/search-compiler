@@ -5,17 +5,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Search compiler playground</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
 
+  <style>
+    body {
+      font-family: monospace;
+      padding: 0 1rem;
+    }
+
+    h1, h2, h3 {
+      text-align: center;
+    }
+
+    .output {
+      background-color: #222;
+      color: white;
+      white-space: pre;
+      padding: 1rem 2rem;
+      margin-left: 1px;
+      line-height: 1.2rem;
+    }
+
+    .error {
+      background-color: indianred;
+      color: black;
+      max-width: 33vw;
+      white-space: initial;
+    }
+
+    button {
+      background-color: white;
+      border: 1px solid black;
+      margin: .1rem 0;
+      cursor: pointer;
+      padding: .35rem .4rem;
+    }
+
+    button:hover {
+      background-color: black;
+      color: white;
+    }
+
+  </style>
 </head>
 <body>
-  <h1>Search Compiler</h1>
-  <h2>Playground</h2>
+  <div style="display: flex;">
+    <div style="text-align: center; margin: 1rem 4rem;">
+      <h1 style="font-size: 3rem;">Search Compiler</h1>
+      <h2 style="font-size: 2rem;">Playground</h2>
+    </div>
 
-  <input id="input">
-  <div id="error-msg" style="display: none"></div>
+    <div style="margin: 2rem; font-size: 1.2rem;">
+      Search compiler understands about measurements<br>
+      Custom measurements can be defined for arbitrary fields<br><br>
+      The following fields have been defined on this playground:<br>
+      <div style="display: inline-block; margin-top: 1rem;">
+        duration (time in seconds)<br>
+        size (data storage in bits)<br>
+        speed (data transmision in bits/second)
+      </div>
+    </div>
+  </div>
 
-  <div>
-    <div>
+  <div style="display: flex; flex-direction: row;">
+    <div style="display: flex; flex-direction: column;">
+      <input id="input" placeholder="Type a filter" style="padding: .25rem; margin-bottom: .5rem;">
+
+      <h3>examples</h3>
+      <button>last name is rodes</button>
+      <button>duration is 1 hour</button>
+      <button>duration is 1 day</button>
+      <button>size is 1MB</button>
+      <button>size is 1_000 MB</button>
+      <button>size is 1,000,000 MB</button>
+      <button>size is 1000000 MB</button>
+      <button>size is 1Byte</button>
+      <button>size is 1GiB</button>
+      <button>speed above 1MBps</button>
       <button>a is equal b</button>
       <button>a is not equal b</button>
       <button>a is in b</button>
@@ -26,28 +92,38 @@
       <button>a <= b</button>
       <button>a not <= b</button>
       <button>a not <= b and c is a or a not above a</button>
-      <button>laSt Name is a</button>
-      <button>last name is a</button>
-      <button>duration is 1 hour</button>
-      <button>duration is 1 day</button>
-      <button>size is 1MB</button>
-      <button>size is 1Byte</button>
-      <button>size is 1GiB</button>
-      <button>speed above 1MBps</button>
     </div>
 
-    <div>
-      <div id="human-text"></div>
-      <div id="json-filter"></div>
+    <div style="display: flex; flex-direction: row; flex-grow: 1; justify-content: space-around;">
+      <div>
+        <h3>Tokens</h3>
+        <div class="output" id="tokens"></div>
+      </div>
+      <div>
+        <h3>Syntaxis</h3>
+        <div class="output" id="syntaxis"></div>
+      </div>
+      <div>
+        <h3>Semantics</h3>
+        <div class="output" id="semantics"></div>
+      </div>
+      <div>
+        <h3>Output</h3>
+        <div class="output" style="font-style: italic; margin-bottom: .5rem;" id="human-text"></div>
+        <div class="output" id="json-filter"></div>
+      </div>
     </div>
   </div>
 
   <script type="module">
-    import SearchCompiler from './lib/Search_Compiler.js'
+    import Tokenizer from './lib/Tokenizer.js'
+    import Syntaxer from './lib/Syntaxer.js'
+    import Semantiker from './lib/Semantiker.js'
 
     import JSON_Filter_Generator from './lib/generators/JSON_Filter_Generator.js'
     import Human_Text_Generator from './lib/generators/Human_Text_Generator.js'
 
+    import Field_Store from './lib/Field_Store.js'
     import Time from './lib/measurements/Time.js'
     import Data_Storage from './lib/measurements/Data_Storage.js'
     import Data_Transmision from './lib/measurements/Data_Transmision.js'
@@ -63,19 +139,11 @@
       })
     }
 
-
-    const $error_msg = document.getElementById('error-msg')
     $input.addEventListener('input', e => {
-      try {
-        update(e.target.value)
-        $error_msg.style.display = 'none'
-      } catch (e) {
-        $error_msg.innerText = e.message
-        $error_msg.style.display = 'block'
-      }
+      update(e.target.value)
     })
 
-    const fields = [
+    const field_store = new Field_Store([
       {
         name: 'Duration',
         attribute: 'duration',
@@ -91,11 +159,40 @@
         attribute: 'speed',
         measurement: new Data_Transmision()
       }
+    ])
+
+    const transformers = [
+      [Tokenizer, document.getElementById('tokens')],
+      [Syntaxer, document.getElementById('syntaxis')],
+      [Semantiker, document.getElementById('semantics')]
     ]
 
     function update (text) {
-      $human_text.innerText = SearchCompiler(text, Human_Text_Generator, fields)
-      $json_filter.innerText = JSON.stringify(SearchCompiler(text, JSON_Filter_Generator, fields), null, 2)
+      for (const [_, $el] of transformers) {
+        $el.classList.remove('error')
+        $el.innerText = ''
+      }
+
+      let output = text
+      for (const [transformer, $el] of transformers) {
+        output = exec(transformer, $el, output)
+
+        if (output == null) return
+      }
+
+      $human_text.innerText = Human_Text_Generator(output, field_store)
+      $json_filter.innerText = JSON.stringify(JSON_Filter_Generator(output, field_store), null, 2)
+    }
+
+    function exec (transformer, $el, input) {
+      try {
+        const output = transformer(input, field_store)
+        $el.innerText = JSON.stringify(output, null, 2)
+        return output
+      } catch (e) {
+        $el.innerText = e.message
+        $el.classList.add('error')
+      }
     }
   </script>
 </body>

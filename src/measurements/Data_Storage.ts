@@ -117,7 +117,7 @@ export default class Data_Storage extends Measurement {
   }
 
   parse (parts: Condition_Text_Part[]): number {
-    if (parts.length !== 2) return
+    if (parts.length !== 2) return parse_number(parts[0].value)
 
     // expects number + remaining
     if (
@@ -126,7 +126,7 @@ export default class Data_Storage extends Measurement {
     ) return
 
     const measure = this.find(parts[1].value)
-    if (measure == null) return
+    if (measure == null) return parse_number(parts[0].value)
 
     return measure.format(parse_number(parts[0].value))
   }
