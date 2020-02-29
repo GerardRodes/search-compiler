@@ -8,7 +8,8 @@ import Field_Store from '../lib/Field_Store'
 const empty_store = new Field_Store([])
 
 const C = (i: string, s: Field_Store): JSON_Filter => JSON_Filter_Generator(Semantiker(Syntaxer(Tokenizer(i)), s))
-test('Semantiker generates operators', t => {
+
+test('JSON_Filter_Generator generates operators', t => {
   t.deepEqual(C('last name is not bla blo', empty_store), {
     logOperator: Filter_Operator_Type.Or,
     conditions: [{
@@ -19,5 +20,145 @@ test('Semantiker generates operators', t => {
         negated: true
       }
     }]
+  })
+
+  t.deepEqual(C('a is equal b', empty_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'a',
+      operator: Condition_Operator_Part_Type.Equal,
+      value: 'b',
+      flags: {
+        negated: false
+      }
+    }]
+  })
+
+  t.deepEqual(C('a is not equal b', empty_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'a',
+      operator: Condition_Operator_Part_Type.Equal,
+      value: 'b',
+      flags: {
+        negated: true
+      }
+    }]
+  })
+
+  t.deepEqual(C('a is in b', empty_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'a',
+      operator: Condition_Operator_Part_Type.Includes,
+      value: 'b',
+      flags: {
+        negated: false
+      }
+    }]
+  })
+
+  t.deepEqual(C('a is not in b', empty_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'a',
+      operator: Condition_Operator_Part_Type.Includes,
+      value: 'b',
+      flags: {
+        negated: true
+      }
+    }]
+  })
+
+  t.deepEqual(C('a is above b', empty_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'a',
+      operator: Condition_Operator_Part_Type.Greater,
+      value: 'b',
+      flags: {
+        negated: false
+      }
+    }]
+  })
+
+  t.deepEqual(C('a is above or equal b', empty_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'a',
+      operator: Condition_Operator_Part_Type.Greater_or_equal,
+      value: 'b',
+      flags: {
+        negated: false
+      }
+    }]
+  })
+
+  t.deepEqual(C('a is above or b', empty_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'a',
+      operator: Condition_Operator_Part_Type.Greater_or_equal,
+      value: 'b',
+      flags: {
+        negated: false
+      }
+    }]
+  })
+
+  t.deepEqual(C('a <= b', empty_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'a',
+      operator: Condition_Operator_Part_Type.Lower_or_equal,
+      value: 'b',
+      flags: {
+        negated: false
+      }
+    }]
+  })
+
+  t.deepEqual(C('a not <= b', empty_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'a',
+      operator: Condition_Operator_Part_Type.Lower_or_equal,
+      value: 'b',
+      flags: {
+        negated: true
+      }
+    }]
+  })
+
+  t.deepEqual(C('a not <= b and c is a or a not above a', empty_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [
+      {
+        logOperator: Filter_Operator_Type.And,
+        conditions: [{
+          attr: 'a',
+          operator: Condition_Operator_Part_Type.Lower_or_equal,
+          value: 'b',
+          flags: {
+            negated: true
+          }
+        }, {
+          attr: 'c',
+          operator: Condition_Operator_Part_Type.Equal,
+          value: 'a',
+          flags: {
+            negated: false
+          }
+        }]
+      },
+      {
+        attr: 'a',
+        operator: Condition_Operator_Part_Type.Greater,
+        value: 'a',
+        flags: {
+          negated: true
+        }
+      }
+    ]
   })
 })
