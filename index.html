@@ -4,16 +4,97 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Playground</title>
+  <title>Search compiler playground</title>
 
 </head>
 <body>
-  <div>
+  <h1>Search Compiler</h1>
+  <h2>Playground</h2>
 
+  <input id="input">
+  <div id="error-msg" style="display: none"></div>
+
+  <div>
+    <div>
+      <button>a is equal b</button>
+      <button>a is not equal b</button>
+      <button>a is in b</button>
+      <button>a is not in b</button>
+      <button>a is above b</button>
+      <button>a is above or equal b</button>
+      <button>a is above or b</button>
+      <button>a <= b</button>
+      <button>a not <= b</button>
+      <button>a not <= b and c is a or a not above a</button>
+      <button>laSt Name is a</button>
+      <button>last name is a</button>
+      <button>duration is 1 hour</button>
+      <button>duration is 1 day</button>
+      <button>size is 1MB</button>
+      <button>size is 1Byte</button>
+      <button>size is 1GiB</button>
+      <button>speed above 1MBps</button>
+    </div>
+
+    <div>
+      <div id="human-text"></div>
+      <div id="json-filter"></div>
+    </div>
   </div>
 
   <script type="module">
+    import SearchCompiler from './lib/Search_Compiler.js'
 
+    import JSON_Filter_Generator from './lib/generators/JSON_Filter_Generator.js'
+    import Human_Text_Generator from './lib/generators/Human_Text_Generator.js'
+
+    import Time from './lib/measurements/Time.js'
+    import Data_Storage from './lib/measurements/Data_Storage.js'
+    import Data_Transmision from './lib/measurements/Data_Transmision.js'
+
+    const $human_text = document.getElementById('human-text')
+    const $json_filter = document.getElementById('json-filter')
+
+    for (const $button of document.getElementsByTagName('button')) {
+      $button.addEventListener('click', e => {
+        update(e.target.innerText)
+      })
+    }
+
+
+    const $error_msg = document.getElementById('error-msg')
+    document.getElementById('input').addEventListener('input', e => {
+      try {
+        update(e.target.value)
+        $error_msg.style.display = 'none'
+      } catch (e) {
+        $error_msg.innerText = e.message
+        $error_msg.style.display = 'block'
+      }
+    })
+
+    const fields = [
+      {
+        name: 'Duration',
+        attribute: 'duration',
+        measurement: new Time()
+      },
+      {
+        name: 'Size',
+        attribute: 'size',
+        measurement: new Data_Storage()
+      },
+      {
+        name: 'Speed',
+        attribute: 'speed',
+        measurement: new Data_Transmision()
+      }
+    ]
+
+    function update (text) {
+      $human_text.innerText = SearchCompiler(text, Human_Text_Generator, fields)
+      $json_filter.innerText = JSON.stringify(SearchCompiler(text, JSON_Filter_Generator, fields), null, 2)
+    }
   </script>
 </body>
 </html>

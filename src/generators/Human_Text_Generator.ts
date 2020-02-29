@@ -2,7 +2,7 @@ import { Semantic_Tree, Node, Condition_Operator } from '../Semantiker'
 import { Condition_Operator_Part_Type } from '../Syntaxer'
 import Field_Store from '../Field_Store'
 
-export default function Human_Text_Generator (semantic_tree: Semantic_Tree, field_store: Field_Store = new Field_Store()): string {
+export default function Human_Text_Generator (semantic_tree: Semantic_Tree, field_store: Field_Store): string {
   return walk_tree(semantic_tree.filter, field_store)
 }
 
