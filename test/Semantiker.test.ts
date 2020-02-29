@@ -3,9 +3,9 @@ import Tokenizer, { Logical_Operator, Comparison_Operator } from '../lib/Tokeniz
 import Syntaxer from '../lib/Syntaxer'
 import Semantiker from '../lib/Semantiker'
 import Field_Store from '../lib/Field_Store'
-import Time from '../lib/Time'
-import Data_Storage from '../lib/Data_Storage'
-import Data_Transmision from '../lib/Data_Transmision'
+import Time from '../lib/measurements/Time'
+import Data_Storage from '../lib/measurements/Data_Storage'
+import Data_Transmision from '../lib/measurements/Data_Transmision'
 
 const empty_store = new Field_Store([])
 const field_store = new Field_Store([
