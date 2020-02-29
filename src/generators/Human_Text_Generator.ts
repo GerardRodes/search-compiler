@@ -17,7 +17,7 @@ function walk_tree (node: Node, field_store: Field_Store): string {
 
   const operator = operator_2_text(node.operator)
 
-  const value = node.value.value
+  const value = node.value.parts.join(' ')
 
   const parts = [attr, operator, value]
 

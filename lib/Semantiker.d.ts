@@ -28,4 +28,4 @@ export declare type Node = Filter | Condition;
 export interface Semantic_Tree {
     filter: Filter;
 }
-export default function Semantiker(syntax_tree: Syntax_Tree, field_store: Field_Store): Semantic_Tree;
+export default function Semantiker(syntax_tree: Syntax_Tree, field_store?: Field_Store): Semantic_Tree;
