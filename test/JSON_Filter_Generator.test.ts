@@ -58,6 +58,18 @@ test('JSON_Filter_Generator generates operators', t => {
     }]
   })
 
+  t.deepEqual(C('a != b', empty_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'a',
+      operator: Condition_Operator_Part_Type.Equal,
+      value: 'b',
+      flags: {
+        negated: true
+      }
+    }]
+  })
+
   t.deepEqual(C('a is not equal b', empty_store), {
     logOperator: Filter_Operator_Type.Or,
     conditions: [{

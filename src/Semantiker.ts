@@ -87,11 +87,18 @@ function walk_tree (syntax_node: Syntax_Node, field_store: Field_Store = new Fie
 }
 
 function generate_operator (parts: Condition_Operator_Part[]): Condition_Operator {
-  if (parts.length === 1) {
-    return { type: parts[0].type, negated: false }
+  const values = new Set(parts.map(part => part.type))
+
+  if (values.has(Condition_Operator_Part_Type.Not_equal)) {
+    values.delete(Condition_Operator_Part_Type.Not_equal)
+    values.add(Condition_Operator_Part_Type.Not)
+    values.add(Condition_Operator_Part_Type.Equal)
+  } else if (values.has(Condition_Operator_Part_Type.Not_includes)) {
+    values.delete(Condition_Operator_Part_Type.Not_includes)
+    values.add(Condition_Operator_Part_Type.Not)
+    values.add(Condition_Operator_Part_Type.Includes)
   }
 
-  const values = new Set(parts.map(part => part.type))
   const negated = values.has(Condition_Operator_Part_Type.Not)
 
   if (negated) {
