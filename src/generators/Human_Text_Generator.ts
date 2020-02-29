@@ -1,17 +1,22 @@
 import { Semantic_Tree, Node, Condition_Operator } from '../Semantiker'
 import { Condition_Operator_Part_Type } from '../Syntaxer'
+import Field_Store from '../Field_Store'
 
-export default function Human_Text_Generator (semantic_tree: Semantic_Tree): string {
-  return walk_tree(semantic_tree.filter)
+export default function Human_Text_Generator (semantic_tree: Semantic_Tree, field_store: Field_Store = new Field_Store()): string {
+  return walk_tree(semantic_tree.filter, field_store)
 }
 
-function walk_tree (node: Node): string {
+function walk_tree (node: Node, field_store: Field_Store): string {
   if (node.type === 'filter') {
-    return node.conditions.map(walk_tree).join(' ' + node.operator + ' ')
+    return node.conditions.map(c => walk_tree(c, field_store)).join(' ' + node.operator + ' ')
   }
 
-  const attr = node.attribute.parts.join(' ')
+  const attr = node.attribute.value in field_store.by_attr
+    ? field_store.by_attr[node.attribute.value].name
+    : node.attribute.parts.join(' ')
+
   const operator = operator_2_text(node.operator)
+
   const value = node.value.value
 
   const parts = [attr, operator, value]

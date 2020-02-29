@@ -46,13 +46,13 @@ export interface Semantic_Tree {
   - replace name for attr with map of { name: attr }
   - transform measurements with Measurement(number, measure)
 */
-export default function Semantiker (syntax_tree: Syntax_Tree, field_store: Field_Store): Semantic_Tree {
+export default function Semantiker (syntax_tree: Syntax_Tree, field_store: Field_Store = new Field_Store()): Semantic_Tree {
   return {
     filter: walk_tree(syntax_tree.filter, field_store) as Filter
   }
 }
 
-function walk_tree (syntax_node: Syntax_Node, field_store: Field_Store = new Field_Store()): Node {
+function walk_tree (syntax_node: Syntax_Node, field_store: Field_Store): Node {
   if (syntax_node.type === 'filter') {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {

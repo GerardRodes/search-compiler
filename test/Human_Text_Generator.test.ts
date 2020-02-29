@@ -31,7 +31,7 @@ const field_store = new Field_Store([
   }
 ])
 
-const C = (i: string, s: Field_Store): string => Human_Text_Generator(Semantiker(Syntaxer(Tokenizer(i)), s))
+const C = (i: string, s: Field_Store): string => Human_Text_Generator(Semantiker(Syntaxer(Tokenizer(i)), s), s)
 
 test('JSON_Filter_Generator generates operators', t => {
   t.deepEqual(C('last name is not bla blo', empty_store), 'last name is not equal to bla blo')
@@ -57,4 +57,12 @@ test('JSON_Filter_Generator generates operators', t => {
   t.deepEqual(C('a not <= b', empty_store), 'a is not lower or equal to b')
 
   t.deepEqual(C('a not <= b and c is a or a not above a', empty_store), 'a is not lower or equal to b and c is equal to a or a is not greater than a')
+})
+
+test('JSON_Filter_Generator generates attributes', t => {
+  t.deepEqual(C('laSt Name is a', field_store), 'Last name is equal to a')
+})
+
+test('JSON_Filter_Generator generates measurement values', t => {
+  t.deepEqual(C('duration is 1 hour', field_store), 'Duration is equal to 1 hour')
 })

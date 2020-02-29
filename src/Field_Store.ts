@@ -4,7 +4,6 @@ import { Condition_Text_Part } from './Syntaxer'
 export interface Field_Definition {
   name: string
   attribute: string
-  possible_values?: Array<string|number>
   measurement?: Measurement
 }
 
