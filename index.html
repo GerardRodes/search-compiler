@@ -54,16 +54,18 @@
 
     const $human_text = document.getElementById('human-text')
     const $json_filter = document.getElementById('json-filter')
+    const $input = document.getElementById('input')
 
     for (const $button of document.getElementsByTagName('button')) {
       $button.addEventListener('click', e => {
-        update(e.target.innerText)
+        $input.value = e.target.innerText
+        $input.dispatchEvent(new Event('input'))
       })
     }
 
 
     const $error_msg = document.getElementById('error-msg')
-    document.getElementById('input').addEventListener('input', e => {
+    $input.addEventListener('input', e => {
       try {
         update(e.target.value)
         $error_msg.style.display = 'none'
