@@ -4,8 +4,32 @@ import Syntaxer, { Filter_Operator_Type, Condition_Operator_Part_Type } from '..
 import Semantiker from '../lib/Semantiker'
 import JSON_Filter_Generator, { JSON_Filter } from '../lib/generators/JSON_Filter_Generator'
 import Field_Store from '../lib/Field_Store'
+import Time from '../lib/measurements/Time'
+import Data_Storage from '../lib/measurements/Data_Storage'
+import Data_Transmision from '../lib/measurements/Data_Transmision'
 
 const empty_store = new Field_Store([])
+const field_store = new Field_Store([
+  {
+    name: 'Last name',
+    attribute: 'apellido'
+  },
+  {
+    name: 'Duration',
+    attribute: 'duration',
+    measurement: new Time()
+  },
+  {
+    name: 'Size',
+    attribute: 'size',
+    measurement: new Data_Storage()
+  },
+  {
+    name: 'Speed',
+    attribute: 'speed',
+    measurement: new Data_Transmision()
+  }
+])
 
 const C = (i: string, s: Field_Store): JSON_Filter => JSON_Filter_Generator(Semantiker(Syntaxer(Tokenizer(i)), s))
 
@@ -160,5 +184,33 @@ test('JSON_Filter_Generator generates operators', t => {
         }
       }
     ]
+  })
+})
+
+test('JSON_Filter_Generator generates attributes', t => {
+  t.deepEqual(C('laSt Name is a', field_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'apellido',
+      operator: Condition_Operator_Part_Type.Equal,
+      value: 'a',
+      flags: {
+        negated: false
+      }
+    }]
+  })
+})
+
+test('JSON_Filter_Generator generates measurement values', t => {
+  t.deepEqual(C('duration is 1 hour', field_store), {
+    logOperator: Filter_Operator_Type.Or,
+    conditions: [{
+      attr: 'duration',
+      operator: Condition_Operator_Part_Type.Equal,
+      value: 60 * 60,
+      flags: {
+        negated: false
+      }
+    }]
   })
 })
